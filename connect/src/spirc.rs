@@ -20,7 +20,7 @@ use core::volume::Volume;
 use playback::mixer::Mixer;
 use playback::player::Player;
 use protocol;
-use protocol::spirc::{DeviceState, Frame, MessageType, PlayStatus, State};
+use protocol::spirc::{DeviceState, Frame, MessageType, PlayStatus, PlayerEvent, State};
 
 pub struct SpircTask {
     player: Player,
