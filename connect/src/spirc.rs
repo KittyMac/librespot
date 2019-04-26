@@ -18,9 +18,9 @@ use core::util::SeqGenerator;
 use core::version;
 use core::volume::Volume;
 use playback::mixer::Mixer;
-use playback::player::Player;
+use playback::player::{Player, PlayerEvent};
 use protocol;
-use protocol::spirc::{DeviceState, Frame, MessageType, PlayStatus, PlayerEvent, State};
+use protocol::spirc::{DeviceState, Frame, MessageType, PlayStatus, State};
 
 pub struct SpircTask {
     player: Player,
@@ -509,7 +509,9 @@ impl SpircTask {
                     self.load_track(play);
                 } else {
                     info!("No more tracks left in queue");
-					self.player.send_event(PlayerEvent::Stopped { "error" });
+					self.player.stop();
+					//let track = SpotifyId::from_base62("error").unwrap();
+					//self.player.send_event(PlayerEvent::Stopped { track });
                     self.state.set_status(PlayStatus::kPlayStatusStop);
                 }
 
