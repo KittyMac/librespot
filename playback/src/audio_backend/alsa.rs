@@ -78,6 +78,7 @@ impl Sink for AlsaSink {
                 Ok(p) => self.0 = Some(p),
                 Err(e) => {
                     error!("Alsa error PCM open {}", e);
+					stop();
                     return Err(io::Error::new(
                         io::ErrorKind::Other,
                         "Alsa error: PCM open failed",
