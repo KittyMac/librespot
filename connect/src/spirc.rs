@@ -509,6 +509,7 @@ impl SpircTask {
                     self.load_track(play);
                 } else {
                     info!("No more tracks left in queue");
+					self.player.send_event(PlayerEvent::Stopped { "error" });
                     self.state.set_status(PlayStatus::kPlayStatusStop);
                 }
 
