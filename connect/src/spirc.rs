@@ -509,9 +509,7 @@ impl SpircTask {
                     self.load_track(play);
                 } else {
                     info!("No more tracks left in queue");
-					self.player.stop();
-					//let track = SpotifyId::from_base62("error").unwrap();
-					//self.player.send_event(PlayerEvent::Stopped { track });
+					self.player.error();
                     self.state.set_status(PlayStatus::kPlayStatusStop);
                 }
 
