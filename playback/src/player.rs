@@ -43,7 +43,7 @@ enum PlayerCommand {
     Pause,
     Stop,
     Seek(u32),
-	Error,
+	Error(u32),
 }
 
 #[derive(Debug, Clone)]
@@ -181,8 +181,8 @@ impl Player {
         self.command(PlayerCommand::Seek(position_ms));
     }
 	
-    pub fn error(&self) {
-        self.command(PlayerCommand::Error)
+    pub fn error(&self, error_num: u32) {
+        self.command(PlayerCommand::Error(error_num))
     }
 }
 
@@ -486,8 +486,8 @@ impl PlayerInternal {
                 }
             }
 			
-            PlayerCommand::Error => {
-				let track_id = SpotifyId::from_base62("error").unwrap();
+            PlayerCommand::Error(error_num) => {
+				let track_id = SpotifyId::from_base62(&format!("error {}", error_num)).unwrap();
                 self.send_event(PlayerEvent::Stopped { track_id });
             }
 
@@ -622,7 +622,7 @@ impl ::std::fmt::Debug for PlayerCommand {
             PlayerCommand::Play => f.debug_tuple("Play").finish(),
             PlayerCommand::Pause => f.debug_tuple("Pause").finish(),
             PlayerCommand::Stop => f.debug_tuple("Stop").finish(),
-			PlayerCommand::Error => f.debug_tuple("Error").finish(),
+			PlayerCommand::Error(error_num) => f.debug_tuple("Error").field(&error_num).finish(),
             PlayerCommand::Seek(position) => f.debug_tuple("Seek").field(&position).finish(),
         }
     }

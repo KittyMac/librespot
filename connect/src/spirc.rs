@@ -18,7 +18,7 @@ use core::util::SeqGenerator;
 use core::version;
 use core::volume::Volume;
 use playback::mixer::Mixer;
-use playback::player::{Player, PlayerEvent};
+use playback::player::{Player};
 use protocol;
 use protocol::spirc::{DeviceState, Frame, MessageType, PlayStatus, State};
 
@@ -508,8 +508,8 @@ impl SpircTask {
                     let play = frame.get_state().get_status() == PlayStatus::kPlayStatusPlay;
                     self.load_track(play);
                 } else {
-                    info!("No more tracks left in queue");
-					self.player.error();
+                    info!("Error 1: No more tracks left in queue");
+					self.player.error(1);
                     self.state.set_status(PlayStatus::kPlayStatusStop);
                 }
 
@@ -599,6 +599,9 @@ impl SpircTask {
             MessageType::kMessageTypeNotify => {
                 if self.device.get_is_active() && frame.get_device_state().get_is_active() {
                     self.device.set_is_active(false);
+					
+					info!("Error 2: No longer the active device");
+					self.player.error(2);
                     self.state.set_status(PlayStatus::kPlayStatusStop);
                     self.player.stop();
                     self.mixer.stop();
