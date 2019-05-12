@@ -487,7 +487,8 @@ impl PlayerInternal {
             }
 			
             PlayerCommand::Error(error_num) => {
-				let track_id = SpotifyId::from_base62(&format!("error {}", error_num)).unwrap();
+				//  b"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+				let track_id = SpotifyId::from_base62(&format!("error{}", error_num)).unwrap();
                 self.send_event(PlayerEvent::Stopped { track_id });
             }
 
